@@ -40,11 +40,65 @@ Note that the `echo = FALSE` parameter was added to the code chunk to prevent pr
 
 : This is an awesome table
 
+```{r}
+#lets make a function
+
+airtemps <- c(212, 30.3, 78, 32)
+celsius1 <- (airtemps[1]-32)*5/9
+celsius2 <- (airtemps[2]-32)*5/9
+celsius3 <- (airtemps[3]-32)*5/9
+
+fahr_to_celsius <- function(fahr) {
+  celsius <- (fahr-32)*5/9
+  return(celsius)
+}
+fahr_to_celsius(airtemps[1]) == celsius1
+
+```
+Practice with the lubridate package
+```{r}
+library(lubridate)
+library(dplyr)
+library(tidyr)
+
+#everything is great when dates are formatted properly
+data.frame(dates=c("2021-01-02","2021-01-03","2021-02-04")) %>% 
+  mutate(dates=as.Date(dates))
+
+#but if not, as.Date doesn't work
+data.frame(dates=c("20210102","20210103","20210204")) %>% 
+mutate(dates = as.Date(dates))
+
+#"ymd" from the lubridate package can help with this
+data.frame(dates=c("20210102","20210103","20210204")) %>% 
+mutate(dates = ymd(dates))
+
+#make fake data
+inconsistent_dates <- c("2009-01-01", 
+                        "20090101", 
+                        "2009-01-01 12:59:59",
+                        "2009-01-01 12:11", 
+                        "2009-01-01 12")
+samples <- data.frame(id = seq_along(inconsistent_dates),
+                      date = inconsistent_dates,
+                      value = rnorm(length(inconsistent_dates), 50, 5))
+samples
+
+parse_date_time(samples$date,
+                orders = c(
+                  "ymd",
+                  "ymd HMS",
+                  "ymd HM",
+                  "ymd H"
+                ))
+```
+
 
 Using datatable and leaflet to make nice tables and maps
 
 ```{r}
 #packages we need
+library(dplyr)
 library(DT)
 library(leaflet)
 
