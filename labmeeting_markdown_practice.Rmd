@@ -39,3 +39,24 @@ Note that the `echo = FALSE` parameter was added to the code chunk to prevent pr
 |           | 5   | 6   |
 
 : This is an awesome table
+
+
+Using datatable and leaflet to make nice tables and maps
+
+```{r}
+#packages we need
+library(DT)
+library(leaflet)
+
+#make example table of some locations
+locations<- data.frame(city=c("Fort Collins","Denver","Colorado Springs"), lat=c(40.590475,39.732326,38.840060), lon = c(-105.077276,-104.981500, -104.774885))
+#make a nice looking table
+datatable(locations)
+
+#make a cool looking interactive map
+leaflet(locations) %>% 
+  addTiles() %>% 
+  addMarkers(lng = ~lon, lat = ~lat, popup = ~city)
+#click on location markers to see the name of the city pop up!
+```
+
